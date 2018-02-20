@@ -1,0 +1,210 @@
+<div class="row">
+    <div class="col-md-7">
+        <div class = "container" infinite-scroll='Posts.nextPage()' infinite-scroll-disabled='Posts.busy' infinite-scroll-distance='2' style="margin-top: 30px; padding: 0px; width: 100%; height: 680px; overflow: auto">
+            <div class="box update" ng-repeat = "(index, post) in Posts.posts track by $index">
+                <div class="box-header">
+                    <h3>
+                        <a>
+                            <img ng-src="{{ post.author.id | imageUrl}}" alt="IMG" onerror="this.src = 'resources/img/ic_default.png'"/>
+                            {{post.author.username}}
+                        </a>
+                        <span>{{post.sharingDate | date : "MM/dd/yyyy 'at' h:mma"}} <i class="fa fa-globe"></i></span>
+                    </h3>
+                    <span><i class="ion-more"></i></span>
+                    <div class="window"><span></span></div>
+                </div>
+                <div class="box-content">
+                    <div class="content">
+                        <p style="word-wrap: break-word; padding-top: 8px; padding-bottom: 0px">{{post.content}}</p>
+                        <div class="img" ng-model="post.activeData">
+                            <div class="row">
+                                <p ng-show = "!post.activeData.type" style="padding: 0px 45px;"><span class="label label-default">{{post.activeData.activityType}}</span></p>
+                                <p ng-show = "post.activeData.type" style="padding: 0px 45px;"><span class="label label-default">{{post.activeData.activityType}}</span> in <span class="label label-info">{{post.activeData.startTime | date : 'yyyy-MM-dd'}}</span> from <span class="label label-warning">{{post.activeData.startTime | getTime : 0}}</span> to <span class="label label-danger">{{post.activeData.startTime | getTime : post.activeData.duration}}</span></p>
+                                <div class="col-sm-4" style="padding: 0px">
+                                    <div class="circle" style="margin-left: 42px">
+                                        <a><h2>{{post.activeData.steps | checkNum }}<small></small><p>Steps</p></h2></a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4" style="padding: 0px">
+                                    <div class="circle circle2">
+                                        <a><h2>{{post.activeData.calories | checkNum }}<small></small><p>Calories</p></h2></a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4" style="padding: 0px; margin-left: -8px">
+                                    <div class="circle circle3" style="margin-left: 0px">
+                                        <a><h2>{{post.activeData.distance | checkUnit : user}}<small></small><p>Distance</p></h2></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='footer'>
+                    <div class='react'>
+                        <a role='button'><span class='glyphicon glyphicon-heart' ng-click = "likeThisPost(post)" style="font-size: x-large; color: {{post.color}}"></span></a>
+                        <a role='button'><span class='glyphicon glyphicon-comment' ng-click="focusInput=true" style="font-size: x-large"></span></a>
+                        <!--<a role='button'><span class='save'></span></a>-->
+                    </div>
+                </div>
+
+                <div class="box-likes">
+                    <div class="row">
+                        <!--<span><a href="#"><img src="https://goo.gl/oM0Y8G" alt="" /></a></span>-->
+                        <!--<span><a href="#"><img src="https://goo.gl/vswgSn" alt="" /></a></span>-->
+                        <!--<span><a href="#"><img src="https://goo.gl/4W27eB" alt="" /></a></span>-->
+                        <span ng-show = "post.nums > 0"><a>{{post.nums}}</a></span>
+                        <span ng-show = "post.nums > 0">Like this</span>
+                    </div>
+                    <div class="row">
+                        <span ng-show="post.comments.length > 0">{{post.comments.length}} comments</span>
+                    </div>
+                </div>
+                <div role="separator" class="divider"></div>
+
+                <div ng-show = "post.commentStartIndex > 0" class="box-click" ng-click = "viewPreviousComments(post)"><span><i class="ion-chatbox-working"></i> View previous comments</span></div>
+                <div class="box-comments">
+                    <div class="comment" ng-repeat = "(indexOfComment, comment) in post.comments.slice(post.commentStartIndex, post.commentStartIndex + 5)">
+                        <!--.slice(((currentDocumentsPage-1)*itemsDocumentsPerPage), ((currentDocumentsPage)*itemsDocumentsPerPage))-->
+                        <img ng-src="{{ comment.customerUser.id | imageUrl }}" alt="" onerror="this.src = 'resources/img/ic_default.png'" />
+                        <div class="content">
+                            <h3>
+                                <a ng-click = "showDeleteCommentButton = !showDeleteCommentButton">{{comment.customerUsername}}</a>
+                                <span><time> {{comment.commentDate | compareTime }} - <span style="color: blue" ng-click = "showParentReply = !showParentReply" >reply</span>&nbsp;&nbsp;<span ng-show = "showDeleteCommentButton && comment.customerUsername == user.username" style="color: red" ng-click="deleteComment(comment, index, post.id)">delete</span></time></span>
+                            </h3>
+                            <p>{{comment.content}}</p>
+                            <div ng-show = "showParentReply" style="margin-top: 24px; margin-bottom: 8px">
+                                <img ng-src="{{ user.id | imageUrl }}" alt="" onerror="this.src = 'resources/img/ic_default.png'" style="width: 36px; height:36px; border-radius: 50%;display: inline-block; margin-top: -10px"/>comment.customerUsername == user.username
+                                <textarea ng-model= "commentForSharing.replyFirstComment" class="well-sm" placeholder="reply to {{comment.customerUsername}} : ..." style="width : calc(100% - 92px) !important; height: 36px;border-radius: 20px;display: inline-block; resize: none; margin-left: 8px; border: 1px solid gainsboro; text-align: inherit"></textarea>
+                                <span ng-click = "createNewComment(post.id, index, comment, indexOfComment, 1, comment.id)" class="glyphicon glyphicon-send" style="display: inline-block; font-size: large; margin: 8px"></span>
+                            </div>
+                        </div>
+                        <div class="replycontent" ng-repeat = "replycomment in comment.replyComments">
+                            <img ng-src="{{ replycomment.customerUser.id | imageUrl }}" alt="" onerror="this.src = 'resources/img/ic_default.png'" style="position: absolute; margin-left: -4px; margin-top: -4px; overflow: hidden; width: 48px; height: 48px; border-radius: 50%; transform: scale(0.75)" />
+                            <h3>
+                                <a ng-click = "showReplyDeleteCommentButton = !showReplyDeleteCommentButton" >{{replycomment.customerUsername}}</a>
+                                <span style="display: grid">
+                                    <time> {{replycomment.commentDate | compareTime }}</time>
+                                    <span style="color: blue" ng-click = "showReplyContent = !showReplyContent">reply</span>
+                                </span>
+                                <span ng-show = "showReplyDeleteCommentButton && comment.customerUsername == user.username" style="color: red" ng-click="deleteComment(replycomment, index, post.id)">delete</span>
+                            </h3>
+
+                            <p>{{replycomment.content}}</p>
+                            <div ng-show = "showReplyContent" style="margin-top: 24px; margin-bottom: 8px">
+                                <img ng-src="{{ user.id | imageUrl }}" alt="" onerror="this.src = 'resources/img/ic_default.png'" style="width: 36px; height:36px; border-radius: 50%;display: inline-block; margin-top: -10px"/>
+                                <textarea ng-model = "commentForSharing.replySecondComment" class="well-sm" placeholder="reply to {{replycomment.customerUsername}} : ..." style="width : calc(100% - 92px) !important; height: 36px;border-radius: 20px;display: inline-block; resize: none; margin-left: 8px; border: 1px solid gainsboro; text-align: inherit"></textarea>
+                                <span ng-click = "createNewComment(post.id, index, replycomment, indexOfComment, 2, comment.id)" class="glyphicon glyphicon-send" style="display: inline-block; font-size: large; margin: 8px"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show = "post.commentStartIndex + 5 < post.totalComments" class="box-click" ng-click = "viewMoreComments(post)" ><span><i class="ion-chatbox-working"></i> View more comments</span></div>
+                <div class="box-new-comment">
+                    <img ng-src="{{ user.id | imageUrl }}" alt="" onerror="this.src = 'resources/img/ic_default.png'" />
+                    <div class="content">
+                        <div class="row" style="margin-left: 0px">
+                            <textarea ng-model="commentForSharing.content" class="well-sm" placeholder="write a comment..." focus-me="focusInput"></textarea>
+                        </div>
+                        <div class="row">
+                            <span class="glyphicon glyphicon-send" ng-click="createNewComment(post.id, index, null, null, 0, null)"></span>
+                            <!--<span class="fa fa-smile-o"></span>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel-heading" style="width: 81%; margin-top: 30px; margin-left: 15px; background-color: white">
+            <span class="glyphicon glyphicon-refresh pull-right" aria-hidden="true" ng-click = "reLoadRanks()"></span>
+            <h3 class="panel-title">
+                <strong>Ranks</strong>
+            </h3>
+        </div>
+
+        <div class="panel-body" infinite-scroll='loadMore()'  infinite-scroll-distance='2' style="max-height: 680px; overflow: auto; padding: 0px; margin-top: -10px; width: 90%">
+            <div class="card" ng-repeat = "(index, rank) in Ranks.ranks track by $index" style=" border-left-width: inherit; border-right-width: inherit; background: linear-gradient(70deg, rgba(255,255,255,1), rgba(255,255,255,0)), #45bcf9;">
+                <div class="card-image">
+                    <img ng-src="{{ rank.author.id | imageUrl }}" onerror="this.src = 'resources/img/ic_default.png'" alt="IMG" class="img-circle" data-toggle="modal" data-target="#rankModal" ng-click = "selectRank(rank)" style="margin: 20px; width: 17%;"/>
+                    <span class="pull-right" style="margin: 20px"><a> {{rank.num}} <i class="fa fa-heart-o" ng-click = "likeThisRank(rank)" aria-hidden="true" style="margin-left: 8px; font-size: x-large; color: {{rank.color}};"></i></a></span>
+                </div>
+                <div class="card-social">
+                    <div class="col-md-4">
+                        <dl style="margin-top: 20px">
+                            <dt style="font-size: small">STEP NUM</dt>
+                            <dd style="font-size: x-large">{{rank.fitnessSummary.steps | checkNum}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-4">
+                        <dl style="margin-top: 20px">
+                            <dt style="font-size: small">CAL</dt>
+                            <dd style="font-size: x-large">{{rank.fitnessSummary.calories | checkNum}}</dd>
+                        </dl>
+                    </div>
+                    <div ng-show = "!checkRank(index)" class="col-md-4">
+                        <dl style="margin-top: 20px">
+                            <dt style="font-size: small">Distance</dt>
+                            <dd style="font-size: x-large">{{rank.fitnessSummary.distance | checkUnit : user}}</dd>
+                        </dl>
+                    </div>
+                    <div ng-show = "checkRank(index)" class="col-md-4" style="margin-top: -16px;height: 92px; overflow: hidden">
+                        <h1 style="font-size: 115px; margin-top: -20px; margin-left: 20px">{{index + 1}}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade bs-example-modal-sm" id ="rankModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="color: cornflowerblue; border: 0px">
+                   <span class="glyphicon glyphicon-menu-left" aria-hidden="true" data-dismiss="modal" aria-label="Close" style="font-size: larger"></span>
+                   <span style="font-size: x-large; margin-left: 31%">{{selectRankValue.author.username}}</span>
+                </div>
+
+                <div class="modal-body">
+                    <div class="profile-sidebar">
+                        <div class="profile-userpic">
+                            <img ng-src="{{ selectRankValue.author.id | imageUrl }}" onerror="this.src = 'resources/img/ic_default.png'" class="img-responsive" alt="">
+                        </div>
+                        <div class="profile-usertitle">
+                            <div class="profile-usertitle-name">
+                                {{selectRankValue.author.firstname}} {{selectRankValue.author.lastname}}
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <dl style="margin-top: 20px">
+                                        <dt style="font-size: small">STEP NUM</dt>
+                                        <dd style="font-size: x-large">{{selectRankValue.fitnessSummary.steps | checkNum}}</dd>
+                                    </dl>
+                                </div>
+                                <div class="col-md-4">
+                                    <dl style="margin-top: 20px">
+                                        <dt style="font-size: small">CAL</dt>
+                                        <dd style="font-size: x-large">{{selectRankValue.fitnessSummary.calories | checkNum}}</dd>
+                                    </dl>
+                                </div>
+                                <div class="col-md-4">
+                                    <dl style="margin-top: 20px">
+                                        <dt style="font-size: small">Distance</dt>
+                                        <dd style="font-size: x-large">{{selectRankValue.fitnessSummary.distance | checkUnit : user}}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ranklineChart" style="width: 100%; height: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<md-button ng-if="hasRole('ROLE_USER')" class="md-fab md-fab-bottom-right md-primary md-button md-hue-2 docs-scroll-fab scrolling" ng-transclude ng-click="create()" docs-scroll-class="scrolling" style="position:fixed;right:20px; bottom:90px;" aria-label="Friends">
+    <md-icon md-svg-src="/resources/img/ic_add.svg"></md-icon>
+</md-button>

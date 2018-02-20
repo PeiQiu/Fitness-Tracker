@@ -1,0 +1,25 @@
+<div>
+  <h2 class="page-header">Users</h2>
+  
+  <table class="table">
+  	<tr>
+  		<th>Last</th>
+  		<th>First</th>
+  		<th>Username</th>
+  		<th>Email</th>
+  		<th>Admin</th>
+  		<th>Employer</th>
+  		<th>User</th>
+  	</tr>
+  	<tr ng-repeat="user in users">
+  		<td>{{user.lastName}}</td>
+  		<td>{{user.firstName}}</td>
+  		<td>{{user.username}}</td>
+  		<td>{{user.email}}</td>
+  		<td><input type="checkbox" ng-checked="hasRole( user, 'ROLE_ADMIN')"></td>
+		<td><input type="checkbox" ng-checked="hasRole( user, 'ROLE_EMPLOYER')"></td>
+  		<td><input type="checkbox" ng-checked="hasRole( user, 'ROLE_USER')"></td>
+  	</tr>
+  
+  </table>
+</div>

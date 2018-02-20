@@ -1,0 +1,81 @@
+<div class="row">
+   <div class="col-md-7" style="margin-top: 20px">
+       <md-content layout-padding>
+           <div>
+               <md-input-container class="md-block" flex-gt-xs>
+                   <label><h3></h3></label>
+               </md-input-container>
+               <form name="userForm">
+                   <md-input-container class="md-block" flex-gt-xs>
+                       <label><h3>DEVICE</h3></label>
+                       <input ng-model="user.device" style="margin-top: -20px" disabled>
+                   </md-input-container>
+
+                   <md-input-container class="md-block" flex-gt-xs>
+                       <label><h4>DeviceType</h4></label>
+                       <input ng-model="device.deviceType" style="margin-top: -20px" disabled>
+                   </md-input-container>
+
+                   <md-input-container class="md-block" flex-gt-xs>
+                       <label><h4>SerialNumber</h4></label>
+                       <input ng-model="device.serialNumber" style="margin-top: -20px" disabled>
+                   </md-input-container>
+
+                   <md-input-container class="md-block" flex-gt-xs>
+                       <label><h4>FirmwareVersion</h4></label>
+                       <input ng-model="device.firmwareVersion" style="margin-top: -20px" disabled>
+                   </md-input-container>
+
+                   <md-input-container class="md-block" flex-gt-xs>
+                       <label><h4>BatteryLevel</h4></label>
+                       <input ng-model="device.batteryLevel" style="margin-top: -20px" disabled>
+                   </md-input-container>
+
+
+                   <md-input-container class="md-block" flex-gt-xs>
+                       <label><h4>LastSyncTime</h4></label>
+                       <input ng-model="device.lastSyncTime" style="margin-top: -20px" disabled>
+                   </md-input-container>
+
+                   <md-button ng-disabled = "!haveDevice()" class="md-warn" ng-click = "disconnect()">Disconnect</md-button>
+               </form>
+           </div>
+       </md-content>
+   </div>
+    <div class="col-md-4" style="margin-top: 20px">
+        <md-content class="md-padding" layout-xs="column" layout="column">
+            <div flex-xs flex-gt-xs="50" layout="column">
+                <md-card>
+                    <img ng-src="{{imagePathJawbone}}" class="md-card-image" alt="Washed Out" style="height: 45px">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">Access Jawbone Account</span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-actions layout="column" layout-align="start">
+                        <md-button ng-disabled="haveDevice()" class="md-raised md-primary" ng-click = 'connectJawbone()'>connect</md-button>
+                    </md-card-actions>
+                </md-card>
+            </div>
+            <div flex-xs flex-gt-xs="50" layout="column">
+                <md-card>
+                    <img ng-src="{{imagePathMisfit}}" class="md-card-image" alt="Washed Out" style="height: 45px">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">Access Misfit Account</span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-actions layout="column" layout-align="start">
+                        <md-button ng-disabled="haveDevice()" class="md-raised md-primary" ng-click = 'connectMisfit(misfit)'>connect</md-button>
+                    </md-card-actions>
+                </md-card>
+            </div>
+        </md-content>
+    </div>
+</div>
+
+
+
+<div>
+
+</div>

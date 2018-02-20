@@ -1,0 +1,142 @@
+
+<section>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div>
+                <md-datepicker ng-model="specificTime" md-placeholder="Enter date" md-max-date="maxDate"></md-datepicker>
+                <button ng-hide="ShowButton()" type="button" class="btn btn-default" ng-click = "search(0)">search</button>
+            </div>
+        </div>
+
+        <div class = 'panel-body'>
+            <div class = "row">
+                <div class="show-info-window col-md-3" >
+                    <h4>HighLights</h4>
+                    <ul>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                Total steps
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{sessions.steps}}
+                            </h4>
+                        </li>
+
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+                                Total distance
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{sessions.distance | checkUnit : user}}km
+                            </h4>
+                        </li>
+
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                Duration
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{sessionsDuration}}
+                            </h4>
+                        </li>
+
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
+                                Total calories
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{sessions.calories | number : 2}}
+                            </h4>
+                        </li>
+
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>
+                                Active calories
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{sessions.activityCalories | number : 2}}
+                            </h4>
+                        </li>
+
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
+                                Total calories
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{sessions.calories | number : 2}}
+                            </h4>
+                        </li>
+
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+                                Awake Time
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{info.awakeTime}}
+                            </h4>
+                        </li>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                Light Sleep Time
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{info.sleepTime}}
+                            </h4>
+                        </li>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                Deep Sleep Time
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{info.deepsleepTime}}
+                            </h4>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="col-md-8">
+                    <h1>Timeline for {{ specificTime | date:'yyyy-MM-dd' }}</h1>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <h5><span class="label" style="background-color: #B39DDB">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Awake</h5>
+                        </div>
+                        <div class="form-group">
+                            <h5><span class="label" style="background-color: #5E35B1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Light Sleep</h5>
+
+                        </div>
+                        <div class="form-group">
+                            <h5><span class="label" style="background-color: #311B92">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Deep Sleep</h5>
+                        </div>
+                        <div class="form-group">
+                            <h5><span class="label" style="background-color: #D32F2F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Active</h5>
+                        </div>
+                        <div class="form-group">
+                            <h5><span class="label" style="background-color: #F3E5F5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;Not Active</h5>
+                        </div>
+                    </form>
+                    <div id="mytimeline" style="width: 680px; height: 300px"></div>
+                    <br>
+                    <div id="dual_div" style="width: 680px; height: 200px"></div>
+                    <div class = "show-info-window" aria-label="...">
+                        <ul class="pager">
+                            <li class="previous"><a ng-click = "search(-1)"><span aria-hidden="true">&larr;</span> Older</a></li>
+                            <li class="next"><a ng-click = "search(1)" >Newer <span aria-hidden="true">&rarr;</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

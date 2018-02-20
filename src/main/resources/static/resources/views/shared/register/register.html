@@ -1,0 +1,75 @@
+    <form class="form-horizontal col-md-offset-1" id="register_form" name="registerForm">
+        <h3 class="form-title" style="color: black">Create a new account</h3>
+        <span class="error-msg" id="warning" ng-show="hasError">{{message}}</span>
+        <div class="col-sm-9 col-md-9">
+                <div class="form-group">
+                    <label for="inputUsername" class="col-md-1" style="margin-bottom: 0px; margin-top: 4px"><span class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: x-large"></span></label>
+                    <div class="col-md-10" style="padding-left: 0px">
+                        <input class="form-control required" type="text" ng-model = 'username' id = "inputUsername" placeholder="Username" name="username" autofocus="autofocus" required/>
+                    </div>
+                    <span style="color: red" ng-show="registerForm.user.$dirty && registerForm.user.$invalid">
+                        <span ng-show="registerForm.user.$error.required">*Please Enter Username</span>
+                    </span>
+                </div>
+
+            <!--//用户的姓名-->
+            <div class="form-group col-md-offset-1" style="margin-left: 4.3333333%">
+                <div class="col-md-5" >
+                    <label class="sr-only" for="first_name">Email address</label>
+                    <input type="text" name="first_name" ng-model = 'firstname' id="first_name" class="form-control" placeholder="First Name" tabindex="1" style="width: -webkit-fill-available" required>
+                </div>
+                <label class="sr-only" for="last_name">Password</label>
+                <div class="col-md-5" style="margin-left: 7.777%">
+                    <input type="text" name="last_name" ng-model = 'lastname' id="last_name" class="form-control" placeholder="Last Name" style="width: -webkit-fill-available" tabindex="2" required>
+                </div>
+            </div>
+
+            <!--//输入密码并验证密码-->
+            <div class="form-group">
+                <span for="register_password" class="col-md-1" style="margin-top: 4px; margin-bottom: 0px"><md-icon md-svg-src="resources/img/ic_security_black_24px.svg"></md-icon></span>
+                <div class="col-md-10" style="padding-left: 0px">
+                    <input class="form-control required" type="password" ng-model = 'password' ng-minlength="1" ng-maxlength="20" placeholder="Password" id="register_password" name="password" required/>
+                </div>
+
+                <span style="color: red" ng-show="registerForm.password.$invalid">
+                        <span ng-show="registerForm.password.$error.minlength">*Password error</span>
+                        <span ng-show="registerForm.password.$error.maxlength">*Password error</span>
+                </span>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <span class="col-md-1" for = "reEnter_password" style="margin-top: 4px; margin-bottom: 0px"><span class="glyphicon glyphicon-ok" aria-hidden="true" style="font-size: x-large"></span></span>
+                <div class="col-md-10" style="padding-left: 0px">
+                    <input class="form-control required" type="password" id="reEnter_password" ng-model="passwordagain" placeholder="Re-type Your Password" name="rpassword" required/>
+                </div>
+                <span style="color: red" ng-show="registerForm.password.$dirty && registerForm.password.$valid">
+                        <span ng-show="passwordagain!=password">*Passwords are inconsistent</span>
+                </span>
+            </div>
+
+
+            <!--//输入邮箱-->
+            <div class="form-group">
+                <span class="col-md-1" for="input_email" style="margin-bottom: 0px; margin-top: 4px"><i class="fa fa-envelope fa-lg" style="font-size: x-large"></i></span>
+                <div class="col-md-10" style="padding-left: 0px">
+                    <input class="form-control email" id = "input_email" type="email" placeholder="Email" name="email" ng-model="email" required/>
+                </div>
+                <span style="color:red" ng-show="registerForm.email.$dirty && registerForm.email.$invalid">
+                    <span ng-show="registerForm.email.$error.required">Email Must Enter</span>
+                    <span ng-show="registerForm.email.$error.email">Invalid Email</span>
+                </span>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-1" style="padding-left: 0px">
+                    <input type="submit" class="btn btn-success pull-right" ng-click = "registerForm.$valid && register()" value="Sign Up "/>
+                    <input type="submit" class="btn btn-info pull-left" ng-click="back()" value="Back"/>
+                </div>
+
+            </div>
+
+        </div>
+    </form>

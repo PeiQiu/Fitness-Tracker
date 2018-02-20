@@ -1,0 +1,165 @@
+
+
+<div class = "row">
+    <div class="col-md-9 col-md-offset-1 well well-sm">
+        <div class = "btn-group">
+            <md-datepicker ng-model="selectSharingDate" md-placeholder="Enter date" md-max-date="maxDate"></md-datepicker>
+            <button ng-hide="ShowButton()" type="button" class="btn btn-default" ng-click = "searchSharingData(0)">search</button>
+        </div>
+        <button ng-click ="close()" type="button" class="close pull-right label label-danger" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+
+
+    <div class = "col-md-9 col-md-offset-1" style=" padding: 0px ">
+        <div ng-show ="signatrue.noteSign" class="alert alert-danger" role="alert" style="margin-bottom: 0px">
+            you have no any activities in this day!!
+        </div>
+    </div>
+
+    <div ng-show = 'showTimeItemlist' class = "col-md-9 col-md-offset-1" style="margin-bottom: 6em; padding: 0px">
+        <div>
+            <md-toolbar md-scroll-shrink ng-if="true">
+                <div class="md-toolbar-tools">
+                    <h2>Activities in {{selectSharingDate | date : 'yyyy-MM-dd'}}</h2>
+                </div>
+            </md-toolbar>
+            <md-content flex>
+                <md-list>
+                    <md-list-item ng-mouseenter="show = true" ng-mouseleave="show = false" class="md-3-line well well-sm" ng-repeat="item in todos.slice(((currentDocumentsPage-1)*itemsDocumentsPerPage), ((currentDocumentsPage)*itemsDocumentsPerPage))">
+                        <div class="md-list-item-text">
+                            <div>
+                                <div class="twPc-divUser">
+                                    <div class="twPc-divName">
+                                        <a>{{item.activityType}}</a>
+                                    </div>
+                                    <span>
+				                    &nbsp;From&nbsp;<span class="label label-warning">{{item.startTime | getEndTime : 0}}</span>
+                                    &nbsp;To&nbsp;<span class="label label-danger">{{item.startTime | getEndTime : item.duration}}</span>
+			                    </span>
+                                </div>
+
+                                <div class="twPc-divStats">
+                                    <ul class="twPc-Arrange">
+                                        <li class="twPc-ArrangeSizeFit">
+                                            <span class="twPc-StatLabel twPc-block">Steps</span>
+                                            <span class="twPc-StatValue">{{item.steps}}</span>
+                                        </li>
+                                        <li class="twPc-ArrangeSizeFit">
+                                            <span class="twPc-StatLabel twPc-block">Calories</span>
+                                            <span class="twPc-StatValue">{{item.calories}}</span>
+                                        </li>
+                                        <li class="twPc-ArrangeSizeFit">
+                                            <span class="twPc-StatLabel twPc-block">Distance</span>
+                                            <span class="twPc-StatValue">{{item.distance | checkUnit : user}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <md-button ng-show = "show" class="md-secondary" ng-click="chooseActiveType(item)" data-toggle="modal" data-target="#myModal" style = "border-radius: 50px">
+                            <a class="btn icon-btn btn-info" style = "border-radius: 50px"><span class="glyphicon btn-glyphicon glyphicon-share img-circle text-info"></span>Share</a>
+                        </md-button>
+                        <md-divider inset></md-divider>
+                    </md-list-item>
+                </md-list>
+                <md-divider inset></md-divider>
+                <center>
+                    <uib-pagination total-items="DocumentsItems" ng-model="currentDocumentsPage" max-size="maxDocumentsSize" class="pagination-sm" boundary-links="true" rotate="false" items-per-page="itemsDocumentsPerPage"></uib-pagination>
+                </center>
+            </md-content>
+        </div>
+    </div>
+
+
+
+    <div class = "col-md-9 col-md-offset-1 well well-sm">
+        <md-content flex>
+            <md-list>
+                <md-list-item ng-mouseenter="showSummary = true" ng-mouseleave="showSummary = false" class="md-3-line">
+                    <div class="md-list-item-text">
+                        <div>
+                            <div class="twPc-divUser">
+                                <div class="twPc-divName">
+                                    <a>{{selectDate | date : 'yyyy-MM-dd'}}</a>
+                                </div>
+                                <span>
+                                    <span class = "label label-success">summary</span>
+                                </span>
+                            </div>
+
+                            <div class="twPc-divStats">
+                                <ul class="twPc-Arrange">
+                                    <li class="twPc-ArrangeSizeFit">
+                                        <span class="twPc-StatLabel twPc-block">Steps</span>
+                                        <span class="twPc-StatValue">{{summaryData.steps | number : 2}}</span>
+                                    </li>
+                                    <li class="twPc-ArrangeSizeFit">
+                                        <span class="twPc-StatLabel twPc-block">Calories</span>
+                                        <span class="twPc-StatValue">{{summaryData.calories | number : 2}}</span>
+                                    </li>
+                                    <li class="twPc-ArrangeSizeFit">
+                                        <span class="twPc-StatLabel twPc-block">Distance</span>
+                                        <span class="twPc-StatValue">{{summaryData.distance | checkUnit : user}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                    <md-button ng-show ="showSummary" class="md-secondary" ng-click="chooseActiveType(summaryData)" data-toggle="modal" data-target="#myModal" style = "border-radius: 70px">
+                        <a class="btn icon-btn btn-info" style = "border-radius: 50px"><span class="glyphicon btn-glyphicon glyphicon-share img-circle text-info"></span>Share</a>
+                    </md-button>
+                </md-list-item>
+            </md-list>
+        </md-content>
+    </div>
+
+
+    <div class="col-md-9 col-md-offset-1 well well-sm">
+        <ul class="pager">
+            <li class="previous"><a ng-click = "searchSharingData(-1)"><span aria-hidden="true">&larr;</span> Older</a></li>
+            <li class="next"><a ng-click = "searchSharingData(1)" >Newer <span aria-hidden="true">&rarr;</span></a></li>
+        </ul>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="border: 0px; padding-bottom: 0px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel" style="margin-left: 2px; font-weight: 600">Create Sharing</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success" role="alert"><strong>{{title}}</strong></div>
+                <div class="row">
+                    <div class="col-sm-4" style="padding: 0px">
+                        <div class="circle" style="margin-left: 20px">
+                            <a><h2 style="margin-top: 28px">{{selectValue.steps | checkNum }}<small></small><p>Steps</p></h2></a>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" style="padding: 0px">
+                        <div class="circle">
+                            <a><h2 style="margin-top: 28px">{{selectValue.calories | checkNum }}<small></small><p>Calories</p></h2></a>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="circle" style="margin-left: 0px">
+                            <a><h2 style="margin-top: 28px">{{selectValue.distance | checkUnit : user}}<small></small><p>Distance(km)</p></h2></a>
+                        </div>
+                    </div>
+                </div>
+                <!--<div id="myColumnChart" style="width: 500px; height: 300px;"></div>-->
+            </div>
+            <div class="modal-footer" style="padding-top: 0px; border: 0px">
+                <textarea ng-model = "commentContent" class="form-group form-control pull-right" rows="4" placeholder="comments"></textarea>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click = "postData(selectValue)">Post</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

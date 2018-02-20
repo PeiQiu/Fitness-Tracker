@@ -1,0 +1,148 @@
+<div calss = "row">
+    <div class = "col-md-3" style="background-color: whitesmoke">
+        <md-datepicker ng-model="selectedCondition.myDate" md-placeholder="Enter date"></md-datepicker>
+        <!-- search form -->
+        <form ng-if="hasRole('ROLE_USER')" class="navbar-form navbar-form-sm navbar-left shift" ui-shift="prependTo" data-target=".navbar-collapse" role="search">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" ng-model="selectedCondition.content" typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control input-sm bg-light no-border rounded padder" placeholder="Search key words...">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-sm bg-light rounded" ng-click = "searchMyPost()"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </div>
+        </form>
+        <!-- / search form -->
+    </div>
+
+    <div class = "col-md-8">
+        <nav class="navbar navbar-default" style="margin-top: 8px; background-color: white">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand">My Posts</a>
+                </div>
+                <button type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left: 4px" ng-click = "showDeleteButton =! showDeleteButton"><span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span></button>
+                <button type="button" class="btn btn-default navbar-btn navbar-right" ng-click = "reLoadMyPost()"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+            </div>
+        </nav>
+        <div class = "container" infinite-scroll='loadMore()' infinite-scroll-distance='2' style="margin-top: 4px; padding: 0px; width: 100%; height: 680px; overflow: auto">
+            <div ng-show="Posts.posts.length <= 0" class="alert alert-warning alert-dismissible" role="alert">
+                <strong>you do not have any posts.</strong>
+            </div>
+
+            <div class="box update" ng-repeat = "(index, post) in Posts.posts | filter : byCondition(selectedCondition)" style="margin-left: 0px">
+                <button ng-show = "showDeleteButton" ng-click = "deleteSharing(post)" type="button" class="close" data-dismiss="alert" aria-label="Close" style="margin-top: -20px; margin-right: 4px">
+                    <span class="glyphicon glyphicon-remove-sign" aria-hidden="true" style="color: red"></span>
+                </button>
+                <div class="box-header">
+                    <h3><a href="">
+                        <img ng-src="{{ post.author.id | imageUrl }}" alt="" onerror="this.src = 'resources/img/ic_default.png'" />
+                        {{post.author.username}}</a>
+                        <span>{{post.sharingDate | date : "MM/dd/yyyy 'at' h:mma"}} <i class="fa fa-globe"></i></span>
+                    </h3>
+                    <span><i class="ion-more"></i></span>
+                    <div class="window"><span></span></div>
+                </div>
+                <div class="box-content">
+                    <div class="content">
+                        <p style="word-wrap: break-word; padding-top: 8px; padding-bottom: 0px">{{post.content}}</p>
+                        <div class="img" ng-model="post.activeData">
+                            <div class="row">
+                                <p ng-show = "!post.activeData.type" style="padding: 0px 45px;"><span class="label label-default">{{post.activeData.activityType}}</span></p>
+                                <p ng-show = "post.activeData.type" style="padding: 0px 45px;"><span class="label label-default">{{post.activeData.activityType}}</span> in <span class="label label-info">{{post.activeData.startTime | date : 'yyyy-MM-dd'}}</span> from <span class="label label-warning">{{post.activeData.startTime | getTime : 0}}</span> to <span class="label label-danger">{{post.activeData.startTime | getTime : post.activeData.duration}}</span></p>
+                                <div class="col-sm-4" style="padding: 0px">
+                                    <div class="circle" style="margin-left: 42px">
+                                        <a><h2>{{post.activeData.steps | checkNum }}<small></small><p>Steps</p></h2></a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4" style="padding: 0px">
+                                    <div class="circle circle2">
+                                        <a><h2>{{post.activeData.calories | checkNum }}<small></small><p>Calories</p></h2></a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4" style="padding: 0px; margin-left: -8px">
+                                    <div class="circle circle3" style="margin-left: 0px">
+                                        <a><h2>{{post.activeData.distance | checkUnit : user}}<small></small><p>Distance</p></h2></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='footer'>
+                    <div class='react'>
+                        <a role='button'><span class='glyphicon glyphicon-heart' ng-click = "likeThisPost(post)" style="font-size: x-large; color: {{post.color}}"></span></a>
+                        <a role='button'><span class='glyphicon glyphicon-comment' ng-click="focusInput=true" style="font-size: x-large"></span></a>
+                        <!--<a role='button'><span class='save'></span></a>-->
+                    </div>
+                </div>
+
+                <div class="box-likes">
+                    <div class="row" style="padding: 0px">
+                        <!--<span><a href="#"><img src="https://goo.gl/oM0Y8G" alt="" /></a></span>-->
+                        <!--<span><a href="#"><img src="https://goo.gl/vswgSn" alt="" /></a></span>-->
+                        <!--<span><a href="#"><img src="https://goo.gl/4W27eB" alt="" /></a></span>-->
+                        <span ng-show = "post.nums > 0"><a>{{post.nums}}</a></span>
+                        <span ng-show = "post.nums > 0">Like this</span>
+                    </div>
+                    <div class="row" style="padding: 0px;">
+                        <span ng-show="post.comments.length > 0">{{post.comments.length}} comments</span>
+                    </div>
+                </div>
+                <div role="separator" class="divider"></div>
+
+                <div class="box-click"><span><i class="ion-chatbox-working"></i> View previous comments</span></div>
+                <div class="box-comments">
+                    <div class="comment" ng-repeat = "(indexOfComment, comment) in post.comments">
+                        <!--.slice(((currentDocumentsPage-1)*itemsDocumentsPerPage), ((currentDocumentsPage)*itemsDocumentsPerPage))-->
+                        <img ng-src="{{ comment.customerUser.id | imageUrl }}" alt="" onerror="this.src = 'resources/img/ic_default.png'" />
+                        <div class="content">
+                            <h3><a ng-click="showDeleteCommentButton = !showDeleteCommentButton">{{comment.customerUsername}}</a>
+                                <span><time> {{comment.commentDate | compareTime }} - <span style="color: blue" ng-click = "showParentReply = !showParentReply" >reply</span>&nbsp;&nbsp;<span ng-show = "showDeleteCommentButton" style="color: red" ng-click="deleteComment(comment, index, post.id)"> delete</span></time></span>
+                            </h3>
+                            <p>{{comment.content}}</p>
+                            <div ng-show = "showParentReply" style="margin-top: 24px; margin-bottom: 8px">
+                                <img ng-src="{{ user.id | imageUrl }}" alt="" onerror="this.src = 'resources/img/ic_default.png'" style="width: 36px; height:36px; border-radius: 50%;display: inline-block; margin-top: -10px"/>
+                                <textarea ng-model= "commentForSharing.replyFirstComment" class="well-sm" placeholder="reply to {{comment.customerUsername}} : ..." style="width : calc(100% - 92px) !important; height: 36px;border-radius: 20px;display: inline-block; resize: none; margin-left: 8px; border: 1px solid gainsboro; text-align: inherit"></textarea>
+                                <span ng-click = "createNewComment(post.id, index, comment, indexOfComment, 1, comment.id)" class="glyphicon glyphicon-send" style="display: inline-block; font-size: large; margin: 8px"></span>
+                            </div>
+                        </div>
+
+                        <div class="replycontent" ng-repeat = "replycomment in comment.replyComments">
+                            <img ng-src="{{ replycomment.replyCustomerUser.id | imageUrl }}" alt="" onerror="this.src = 'resources/img/ic_default.png'" style="position: absolute; margin-left: -4px; margin-top: -4px; overflow: hidden; width: 48px; height: 48px; border-radius: 50%; transform: scale(0.75)" />
+                            <h3>
+                                <a ng-click="showReplyDeleteCommentButton = !showReplyDeleteCommentButton">{{replycomment.customerUsername}}</a>
+                                <span style="display: inline"> reply {{replycomment.replyCustomerUser.username}}</span>
+                                <span><time> {{replycomment.commentDate | compareTime }} - <span style="color: blue" ng-click = "showReplyContent = !showReplyContent">reply</span>&nbsp;&nbsp;<span ng-show="showReplyDeleteCommentButton" style="color: red" ng-click="deleteComment(replycomment, index, post.id)">delete</span></time></span>
+                            </h3>
+                            <p>{{replycomment.content}}</p>
+                            <div ng-show = "showReplyContent" style="margin-top: 24px; margin-bottom: 8px">
+                                <img ng-src="{{ user.id | imageUrl }}" alt="" onerror="this.src = 'resources/img/ic_default.png'" alt="" style="width: 36px; height:36px; border-radius: 50%;display: inline-block; margin-top: -10px"/>
+                                <textarea ng-model = "commentForSharing.replySecondComment" class="well-sm" placeholder="reply to {{replycomment.customerUsername}} : ..." style="width : calc(100% - 92px) !important; height: 36px;border-radius: 20px;display: inline-block; resize: none; margin-left: 8px; border: 1px solid gainsboro; text-align: inherit"></textarea>
+                                <span ng-click = "createNewComment(post.id, index, replycomment, indexOfComment, 2, comment.id)" class="glyphicon glyphicon-send" style="display: inline-block; font-size: large; margin: 8px"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-click"><span><i class="ion-chatbox-working"></i> View more comments</span></div>
+                <div class="box-new-comment">
+                    <img ng-src="{{ user.id | imageUrl }}" alt="" onerror="this.src = 'resources/img/ic_default.png'" />
+                    <div class="content">
+                        <div class="row" style="margin-left: 0px">
+                            <textarea ng-model="commentForSharing.content" class="well-sm" placeholder="write a comment..." focus-me="focusInput"></textarea>
+                        </div>
+                        <div class="row">
+                            <span class="glyphicon glyphicon-send" ng-click="createNewComment(post.id, index, null, null, 0, null)"></span>
+                            <!--<span class="fa fa-smile-o"></span>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<md-button ng-if="hasRole('ROLE_USER')" class="md-fab md-fab-bottom-right md-primary md-button md-hue-2 docs-scroll-fab scrolling" ng-transclude ng-click="create()" docs-scroll-class="scrolling" style="position:fixed;right:20px; bottom:90px;" aria-label="Friends">
+    <md-icon md-svg-src="/resources/img/ic_add.svg"></md-icon>
+</md-button>

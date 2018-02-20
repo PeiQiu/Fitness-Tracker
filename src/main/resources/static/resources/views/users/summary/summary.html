@@ -1,0 +1,188 @@
+
+<section>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>Active Summary</h2>
+
+            <div class="btn-group" uib-dropdown>
+                <button ng-init ="dataType = 'steps'" id="split-button" type="button" class="btn btn-default">Select DataType</button>
+                <button type="button" class="btn btn-default" uib-dropdown-toggle>
+                    <span class="caret"></span>
+                    <span class="sr-only">Split button!</span>
+                </button>
+                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                    <li role="menuitem"><a ng-click = "changeDataType('steps')">Steps</a></li>
+                    <li class="divider"></li>
+                    <li role="menuitem"><a ng-click = "changeDataType('distance')">Distance</a></li>
+                </ul>
+            </div>
+
+
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Select Range<span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a ng-click ="search('5')">Last 5 Days</a></li>
+                    <li><a ng-click ="search('10')">Last 10 Days</a></li>
+                    <li><a ng-click ="search('15')">Last 15 Days</a></li>
+                    <li><a ng-click ="search('30')">Last 30 Days</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a ng-click = 'show()'>Custom</a></li>
+                </ul>
+            </div>
+
+            <div ng-if = "customCalender" style="background-color: white">
+                <md-datepicker ng-model="selecttime.start" md-placeholder="Start date" md-max-date="selecttime.end"></md-datepicker>
+                <md-datepicker ng-model="selecttime.end" md-placeholder="End date" md-min-date="selecttime.start" md-max-date="maxDate"></md-datepicker>
+                <button type="button" class="btn btn-default" ng-click ="search('1')">Search</button>
+            </div>
+        </div>
+
+        <div class = 'panel-body'>
+            <div class = "row" style="margin-left: 0px">
+                <div class = "show-info-window col-md-4" style="min-height: 400px">
+                    <h4>HighLights</h4>
+                    <ul>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                Total {{dataType}}
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{summary[dataType] | unity : dataType : device}}
+                            </h4>
+                        </li>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+                                Average {{dataType}}
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{average | unity : dataType : device}}
+                            </h4>
+                        </li>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                Highest {{dataType}}
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{info[('max' + dataType)] | unity : dataType : device}}
+                            </h4>
+                        </li>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                Lowest {{dataType}}
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{info['min' + dataType] | unity : dataType : device}}
+                            </h4>
+                        </li>
+                    </ul>
+                </div>
+                <div class = 'col-md-8'>
+                    <div id="curve_chart" style="width: 680px; height: 450px"></div>
+                </div>
+            </div>
+
+
+
+            <div class = "row" style="margin-left: 0px">
+                <div class = "show-info-window col-md-4" style="min-height: 400px">
+                    <h4>HighLights</h4>
+                    <ul>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                Total calories
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{summary.calories | number : 2}}
+                            </h4>
+                        </li>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
+                                Total active calories
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{summary.activityCalories | number : 2}}
+                            </h4>
+                        </li>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                Highest calories
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{info['maxcalories'] | number : 2}}
+                            </h4>
+                        </li>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                Lowest calories
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{info['mincalories'] | number : 2}}
+                            </h4>
+                        </li>
+                    </ul>
+                </div>
+                <div class = 'col-md-8'>
+                    <div id="calories_chart" style="width: 680px; height: 400px"></div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<section>
+
+    <div class="panel panel-default">
+        <div clss = "panel-heading">
+        </div>
+        <div class = 'panel-body'>
+            <div class = "row" style="margin-left: 0px">
+                <div class= "show-info-window col-md-4" style="min-height: 400px">
+                    <h4>HighLights</h4>
+                    <ul>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                Best days
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{sleepInfo.bestDay}}
+                            </h4>
+                        </li>
+                        <li>
+                            <label class="show-info-window-label">
+                                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                Worst day
+                            </label>
+                            <h4 class="show-info-window-word">
+                                {{sleepInfo.worstDay}}
+                            </h4>
+                        </li>
+                    </ul>
+                </div>
+                <div class = 'col-md-8'>
+                    <div id="line_top_x" style="width: 680px; height: 450px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

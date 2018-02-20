@@ -1,0 +1,248 @@
+<div class="row">
+    <div class="col-md-3">
+        <div class="panel panel-default" ng-show = "optionalShowForFriend">
+            <div class="panel-heading">
+                <strong>Friend Information</strong>
+                <span class="pull-right" ng-click = "showButton()"><a><i class="fa fa-ellipsis-v"></i></a></span>
+            </div>
+
+            <div class="panel-body text-center">
+                <div class="profile-block">
+                    <div class="user-heading"><a><img src="http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder-300x300.png" alt="" title=""></a>
+                        <h1>{{friend.friend.username}}</h1>
+                        <p>{{friend.friend.firstname}} {{friend.friend.lastname}}</p>
+                    </div>
+
+                    <div class="info-section no-edit-forms">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-phone fa-lg"></i></span>
+                                <input type="text" class="form-control" placeholder="Mobile" value={{friend.friend.phone}} readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope fa-lg"></i></span>
+                                <input  type="text" style="padding: 2px" class="form-control"  placeholder="Email" value={{friend.friend.email}} readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button ng-show = "showDeleteButton"  ng-click="deleteFriend(friend)" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i><span style="padding-left: 8px">Delete</span></button>
+            </div>
+        </div>
+
+
+        <div layout="column" flex="" layout-fill="" ng-cloak="" class="subheaderdemoBasicUsage" ng-show="!optionalShowForFriend">
+            <md-toolbar md-scroll-shrink="">
+                <div class="md-toolbar-tools">
+                    <h2 flex md-truncate>Group Member</h2>
+                    <md-button class="md-icon-button" ng-click= "showGetOutButton = !showGetOutButton" aria-label="More">
+                        <!--/Users/peiqiutian/Documents/workspace/FitnessTracker/src/main/resources/static/resources/img/more_vert.svg-->
+                        <md-icon md-svg-icon="/resources/img/more_vert.svg"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+
+            <md-content style="height: 500px;" md-theme="altTheme">
+                <section ng-repeat = "tab in friendsTypeTabs">
+                    <md-subheader class="md-warn">{{ tab }}</md-subheader>
+                    <md-list layout-padding="">
+                        <md-list-item class="md-3-line" ng-repeat="friendInfo in friendsDetails[tab]" style = "height : 55px; min-height: 50px">
+                            <img ng-src="{{friendInfo.id | imageUrl}}" class="md-avatar" alt="{{friendInfo.username}}" style="margin-top: 8px">
+                            <div class="md-list-item-text" style="margin-top: 8px">
+                                <h3>{{friendInfo.username}}</h3>
+                                <h4>{{friendInfo.firstname}} {{friendInfo.lastname}}</h4>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </section>
+            </md-content>
+            <md-content>
+                <section  ng-show = "showGetOutButton" layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                    <md-button ng-click = "rollOutGroup()" class="md-raised md-warn">Roll-Out</md-button>
+                </section>
+            </md-content>
+        </div>
+    </div>
+
+
+
+    <div class="col-md-8" style="min-height: 470px">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-comment"></span> Chat
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </button>
+                    <ul class="dropdown-menu slidedown">
+                        <li><a ng-click="reloadMessage()"><span class="glyphicon glyphicon-refresh">
+                            </span>Refresh</a></li>
+                        <!--<li><a href="#"><span class="glyphicon glyphicon-ok-sign">-->
+                            <!--</span>Available</a></li>-->
+                        <!--<li><a href="#"><span class="glyphicon glyphicon-remove">-->
+                            <!--</span>Busy</a></li>-->
+                        <!--<li><a href="#"><span class="glyphicon glyphicon-time"></span>-->
+                            <!--Away</a></li>-->
+                        <li class="divider"></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-off"></span>
+                            Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body" scroll-to-bottom="messages" style="overflow-y: auto; height: 512px">
+                <!--<ui class = "chat">-->
+                    <!--<li class="left clearfix">-->
+                        <!--<span class="chat-img pull-left">-->
+                            <!--<img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />-->
+                        <!--</span>-->
+                        <!--<div class="chat-body well well-sm">-->
+                            <!--<div class="header">-->
+                                <!--<strong class="primary-font"> firstname </strong>-->
+                                <!--<small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span> e.datetime </small>-->
+                            <!--</div>-->
+                            <!--<p style="text-align: left; display: block; word-wrap: break-word; word-break: normal">-->
+                                <!--message.content,message.content,message.content,message.content,message.contentmessage.content,message.content,message.content,message.content,message.content-->
+                            <!--</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+
+
+                    <!--<li class="right clearfix">-->
+                        <!--<span class="chat-img pull-right">-->
+                            <!--<img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />-->
+                        <!--</span>-->
+                        <!--<div class="chat-body well well-sm">-->
+                            <!--<div class="header">-->
+                                <!--<small class=" text-muted"><span class="glyphicon glyphicon-time"></span> e.datetime </small>-->
+                                <!--<strong class="pull-right primary-font"> firstname </strong>-->
+                            <!--</div>-->
+                            <!--<p style="text-align: left; display: block; word-wrap: break-word; word-break: normal">-->
+                                <!--message.content,message.content,message.content,message.content,message.contentmessage.content,message.content,message.content,message.content,message.content-->
+                            <!--</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+
+                    <!--<li class="left clearfix">-->
+                        <!--<span class="chat-img pull-left">-->
+                            <!--<img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />-->
+                        <!--</span>-->
+                        <!--<div class="chat-body well well-sm">-->
+                            <!--<div class="header">-->
+                                <!--<strong class="primary-font"> firstname </strong>-->
+                                <!--<small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span> e.datetime </small>-->
+                            <!--</div>-->
+                            <!--<p style="text-align: left; display: block; word-wrap: break-word; word-break: normal">-->
+                                <!--message.content,message.content,message.content,message.content,message.contentmessage.content,message.content,message.content,message.content,message.content-->
+                            <!--</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+
+
+                    <!--<li class="right clearfix">-->
+                        <!--<span class="chat-img pull-right">-->
+                            <!--<img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />-->
+                        <!--</span>-->
+                        <!--<div class="chat-body well well-sm">-->
+                            <!--<div class="header">-->
+                                <!--<small class=" text-muted"><span class="glyphicon glyphicon-time"></span> e.datetime </small>-->
+                                <!--<strong class="pull-right primary-font"> firstname </strong>-->
+                            <!--</div>-->
+                            <!--<p style="text-align: left; display: block; word-wrap: break-word; word-break: normal">-->
+                                <!--message.content,message.content,message.content,message.content,message.contentmessage.content,message.content,message.content,message.content,message.content-->
+                            <!--</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+
+                    <!--<li class="left clearfix">-->
+                        <!--<span class="chat-img pull-left">-->
+                            <!--<img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />-->
+                        <!--</span>-->
+                        <!--<div class="chat-body well well-sm">-->
+                            <!--<div class="header">-->
+                                <!--<strong class="primary-font"> firstname </strong>-->
+                                <!--<small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span> e.datetime </small>-->
+                            <!--</div>-->
+                            <!--<p style="text-align: left; display: block; word-wrap: break-word; word-break: normal">-->
+                                <!--message.content,message.content,message.content,message.content,message.contentmessage.content,message.content,message.content,message.content,message.content-->
+                            <!--</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+
+
+                    <!--<li class="right clearfix">-->
+                        <!--<span class="chat-img pull-right">-->
+                            <!--<img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />-->
+                        <!--</span>-->
+                        <!--<div class="chat-body well well-sm">-->
+                            <!--<div class="header">-->
+                                <!--<small class=" text-muted"><span class="glyphicon glyphicon-time"></span> e.datetime </small>-->
+                                <!--<strong class="pull-right primary-font"> firstname </strong>-->
+                            <!--</div>-->
+                            <!--<p style="text-align: left; display: block; word-wrap: break-word; word-break: normal">-->
+                                <!--message.content,message.content,message.content,message.content,message.contentmessage.content,message.content,message.content,message.content,message.content-->
+                            <!--</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+
+                    <!--<li class="left clearfix">-->
+                        <!--<span class="chat-img pull-left">-->
+                            <!--<img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />-->
+                        <!--</span>-->
+                        <!--<div class="chat-body well well-sm">-->
+                            <!--<div class="header">-->
+                                <!--<strong class="primary-font"> firstname </strong>-->
+                                <!--<small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span> e.datetime </small>-->
+                            <!--</div>-->
+                            <!--<p style="text-align: left">-->
+                                <!--message.content,message.content,message.content,message.content,message.contentmessage.content,message.content,message.content,message.content,message.content-->
+                            <!--</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+
+
+                    <!--<li class="right clearfix">-->
+                        <!--<span class="chat-img pull-right">-->
+                            <!--<img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />-->
+                        <!--</span>-->
+                        <!--<div class="chat-body well well-sm">-->
+                            <!--<div class="header">-->
+                                <!--<small class=" text-muted"><span class="glyphicon glyphicon-time"></span> e.datetime </small>-->
+                                <!--<strong class="pull-right primary-font"> firstname </strong>-->
+                            <!--</div>-->
+                            <!--<p style="text-align: right">-->
+                                <!--message.content,message.content,message.content,message.content,message.contentmessage.content,message.content,message.content,message.content,message.content-->
+                            <!--</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+
+                <!--</ui>-->
+
+
+
+
+
+
+
+
+                <ul class="chat">
+                    <chat-message scrolltothis="scrollToBottom()" username = "user.username" message="chatmessage" ng-repeat="chatmessage in messages"></chat-message>
+                </ul>
+            </div>
+            <div class="panel-footer">
+                <div class="input-group">
+                    <input id="btn-input" ng-model ="inputValue.content" type="text" ng-enter="sendMessage()" class="form-control input-sm" placeholder="Type your message here..." />
+                    <span class="input-group-btn">
+                            <button class="btn btn-warning btn-sm" id="btn-chat" ng-click="sendMessage()">Send</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+

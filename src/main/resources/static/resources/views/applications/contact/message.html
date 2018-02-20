@@ -1,0 +1,37 @@
+
+    <!-- 普通消息 -->
+<li ng-show = "message.sender.username != username" class="left clearfix">
+    <div class="pull-left" style="width: fit-content">
+        <span class="chat-img pull-left">
+            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+        </span>
+        <div class="chat-body" style="padding-top: 8px">
+            <div class="header">
+                <strong class="primary-font" style="margin-right: 8px">{{message.sender.username}}</strong>
+                <small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span>{{message.datetime | checkDateTime }}</small>
+            </div>
+            <p class="well well-sm" style="text-align: left; border-top-left-radius: 2px;word-wrap: break-word; word-break: break-all">
+                {{message.content}}
+            </p>
+        </div>
+    </div>
+</li>
+
+
+<li ng-show = "message.sender.username == username" class="right clearfix">
+    <div class="pull-right" style="width: fit-content">
+        <span class="chat-img pull-right">
+            <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+        </span>
+        <div class="chat-body" style="border-top-right-radius: 2px; padding-top: 8px">
+            <div class="header">
+                <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>{{message.datetime | checkDateTime }}</small>
+                <strong class="pull-right primary-font" style="margin-left: 8px">{{message.sender.username}}</strong>
+            </div>
+            <p class="well well-sm" style="text-align: right; border-top-right-radius: 2px;background-color: aliceblue;word-wrap: break-word; word-break: break-all">
+                {{message.content}}
+            </p>
+        </div>
+    </div>
+
+</li>
